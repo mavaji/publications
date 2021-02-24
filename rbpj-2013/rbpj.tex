@@ -1,0 +1,359 @@
+% Default Compiler: txs:///pdflatex
+
+\documentclass[onecolumn,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[linktocpage=true,colorlinks,citecolor=blue,pagebackref=true]{hyperref}
+\usepackage{datetime}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+    \title{Effect of Buffer Size and Packet Delay on the Survivability of Packet Switched Networks}
+    \IEEEpubid{$1^{st}$ National Conference on New Approaches in Computer Engineering and Information Retrieval, 7 October 2013}
+    \date{7 October 2013}
+    \author{\IEEEauthorblockN{1\textsuperscript{st} Vahid Mavaji}
+    \IEEEauthorblockA{\textit{Department of Computer Engineering} \\
+    \textit{Sharif University of Technology}\\
+    Tehran, Iran \\
+    mavaji@alum.sharif.edu}
+    \and
+    \IEEEauthorblockN{2\textsuperscript{nd} Bahareh Abbasi}
+    \IEEEauthorblockA{\textit{Department of Computer Engineering} \\
+    \textit{Sharif University of Technology}\\
+    Tehran, Iran \\
+    b\_abbasi@alum.sharif.edu}
+    }
+
+    \maketitle
+
+    \begin{abstract}
+        In this paper, the survivability of general-case packet-switched networks is studied. Most of network properties are considered as random variables and a queuing-theory based model is derived. In this model, the effect of buffer size and packets' delay on the survivability of the network is considered. Simulation results are used to validate the proposed model. The simulation results agree very well with the model.
+    \end{abstract}
+
+    \begin{IEEEkeywords}
+        Survivability, Packet Switched Networks, Buffer Size, Delay
+    \end{IEEEkeywords}
+
+    \section{Introduction} \label{sec:intro}
+    The problem of designing networks able to survive an enemy attack or natural disaster is of paramount importance. Recent work has focused on the mathematical formulation of physically meaningful survivability criteria, the development of analysis methods to rank networks in terms of these criteria, and the generation of networks which are optimal with respect to these criteria. Numerous partial results for a variety of network models are available.
+
+    The study of network survivability has been divided into two nearly disjoint areas: deterministic survivability and probabilistic survivability. In the former, an adversary is usually assumed to have complete knowledge about the system to be attacked and also uses a deterministic attack strategy. In a probabilistic model, the adversary may have only partial information about the enemy's network or may employ a randomized attack strategy.
+
+    Because of the dichotomy of network and attack models, typical survivability criteria can also be classified as either deterministic or probabilistic. A network may be considered to ``survive'' an attack if 1) all points (nodes) can communicate with each other; 2) there are some flow paths between specified pairs of points; 3) the number of points in the largest connected section exceeds a specified threshold; or 4) the shortest surviving path between each pair of points is no longer than a specified length.
+
+    The object of a deterministic analysis might be to determine if these criteria are met subject to a known attack while a probabilistic analysis might seek to find the probabilities that these criteria will be satisfied. Corresponding design objectives could then be constructing networks subject to fixed resources which maximize the effort the adversary must make to ``destroy'' the network, or the probability that the network will survive.
+
+    The purpose of this paper is to perform a probabilistic analysis of packet-switched network considering the packet loss and delay of packets as survivability measures. The effect of buffer size is also examined.
+
+    The rest of this paper is organized as follows: in Section \ref{sec:rlwork} a literature survey is presented. In Section \ref{sec:prel} the preliminaries and assumption of the problem are clarified. In Section \ref{sec:eval} a model for evaluating the survivability is derived. Section~\ref{sec:simres} presents the simulation results and Section \ref{sec:conc} concludes the paper.
+
+    \section{Related Work} \label{sec:rlwork}
+    Four of the issues that arise in the development of survivable architectures are discussed in \cite{b5}. A framework for providing survivability to group communications, where part of the underlying traffic layer infrastructure is connection oriented, is presented in \cite{b13}. The framework is multi-layered to express the virtual overlays inherent to networked systems.
+
+    In \cite{b14}, the use of a hop-limit constraint with techniques to provide survivability for connection-oriented ATM group communications is examined. A hop-limit: (1) limits the number of routes considered such that the routing problems of higher order complexity can be solved, and (2) limits the length of any individual route to meet specific Quality of Service guarantees (such as delay).
+
+    A quantitative approach to evaluate network survivability is proposed in \cite{b2}. The network survivability is perceived as a composite measure consisting of both network failure duration and failure impact on the network. A wireless ad-hoc network is analyzed as an example, and the excess packet loss due to failures (ELF) is taken as the survivability performance measure. To obtain ELF, a two-phase approach is adopted consisting of the steady-state availability analysis and system transient performance analysis. Assuming Markovian property for the system, this measure is obtained by solving a set of Markov models.
+
+    In \cite{b11}, a mathematical model for an efficient lightpath routing called \textit{Load Distribution-Survivable Lightpath Routing (LD-SLR)} is proposed, which can mitigate the impact of the failure disruption in the OVPN by introducing the load distribution concept to the survivable lightpath routing.
+
+    In \cite{b12}, the following question is addressed: what is the minimum number of links that has to be added to a physical topology so that the survivable routing of a logical ring is possible? An ILP formulation for finding the optimal solution of the problem is provided. An optimization model for the design of survivable wireless access networks is proposed in \cite{b1}. The main objective of the model is to optimize the network design cost of wireless backhaul networks while meeting survivability requirements. A simple and efficient heuristic method to solve the network design model for large network problem sizes within a reasonable computational time is also presented.
+
+    Several survivable architectures for telephone subscriber network based on common survivability principles are proposed in \cite{b6}. In order to quantitatively assess the effectiveness of design alternatives, a set of analytical models are developed to derive various survivability measures. In \cite{b7}, a general survivability quantification framework which is applicable to a wide range of system architectures, applications, failure/recovery behaviors, and desired metrics is proposed. An illustrative example of a telecommunications switching system is given for the ease of discussion.
+
+    A composite model for survivability that consists of performance and availability analysis is proposed in \cite{b3}. An analytical technique is presented to find the excess loss due to failure (ELF) when the system is operating in gracefully degraded states.
+
+    In \cite{b8}, the Spare Capacity Allocation (SCA) problem structure is unraveled using a matrix-based model. A fast and efficient approximation algorithm, termed successive survivable routing (SSR), is also developed. The problem of provisioning spare capacity in multi-layer backbone networks in order to meet survivability requirements is considered in \cite{b9}. A matrix based model is presented showing how failure propagation can be mapped across network layers.
+
+    In \cite{b10} authors propose a survivability scheme to support reliable service of the wireless access point level (BS-base station system). With the survivability scheme, the mobile network can use an overlap BS of the cellular network architecture after a BS system failure. The performance of the proposed scheme is analyzed using Markov models. The proposed scheme shows that service of the mobile network can be provided under the BS system failure.
+
+    Through analyzing the changes of key services' performance index value before and after evaluation, \cite{b15} proposed a novel quantitative analysis method for network survivability based on grey relational analysis. Starting with the normalization of decision matrix with interval number, the proposed method firstly applies grey relational analysis to assess the best affiliate degree and survival probability of every key service. Then, it analyzes the changes of every key service's survivability based on network entropy difference. Finally, it obtains the synthetic analysis for the whole network survivability.
+
+    \section{Preliminaries} \label{sec:prel}
+    For evaluating the survivability of packet switched networks, we suppose that each of network nodes has the structure depicted in Fig. \ref{fig:1}, i.e. each of them is an $m/m/1/k$ queue.
+
+    \begin{figure}[htbp]
+        \centering
+        \makebox[\textwidth]{\includegraphics{rbpj1.png}}
+        \caption{Structure of network nodes}
+        \label{fig:1}
+    \end{figure}
+
+    Moreover, suppose that the network is a set of such nodes, so that its topology is unknown. A sample network is shown in Fig. \ref{fig:2}.
+
+    \begin{figure}[htbp]
+        \centering
+        \makebox[\textwidth]{\includegraphics{rbpj2.png}}
+        \caption{A sample network consisting of $m/m/1/k$ nodes}
+        \label{fig:2}
+    \end{figure}
+
+    For example, there are several potential paths between the source and the destination nodes. Suppose that the path $\{a, b, c, d\}$ is established. If for some reason, this path is disconnected, another path can be used as a replacement. For instance, if link c fails, the paths $\{m, h\}$ or $\{i, l, o, h\}$ can be used.
+
+    An important consideration is that in general case and in packet switched network, the network topology in unknown. That is, we have to consider anything as statistical. For performing mathematical operations, most of network parameters most be treated as random variables. The following assumptions about nodes and the network itself are made:
+
+    \begin{enumerate}
+        \item Network nodes have the same statistical properties.
+        \item The routing algorithm selects each of alternative paths with equal probability.
+        \item The network links fail independently from each other.
+        \item If at least one of the path's links fails, we consider that path as failed (disconnected).
+        \item The network paths have the same statistical properties.
+        \item The number of nodes of a path is a random variable called $N$.
+        \item The failure probability of each link is $LF$.
+        \item The buffer size of each node is equal to $B$.
+        \item Packet arrival to each node has the Poisson distribution with parameter $\lambda$.
+        \item Service rate to the packets is $\mu$.
+        \item Initially, there are $R$ paths.
+    \end{enumerate}
+
+    \section{Evaluating the Survivability} \label{sec:eval}
+    With the above assumptions, we begin the modeling process.
+
+    \textbf{Step 1:} we calculate the packet loss of a typical path. The packet loss of a path, $PL_{path}$, is the sum of packet losses of all of its constituent nodes:
+    \begin{equation}
+        PL_{path}=\sum_{i=1}^nPL_i
+    \end{equation}
+    Now, we obtain the expectation or mean value of packet loss in a path. The long term average rate of packet loss in a node is equal to packet loss probability of that node, denoted it by $PL_i$.
+
+    \begin{equation}
+        E\left[PL_{path}\right]=E\left[\sum_{i=1}^nPL_i\right]=\sum_{i=1}^{E\left[n\right]}E\left[PL_i\right]
+    \end{equation}
+
+    Now, we have to calculate the mean value of packet loss in each node. The packet loss probability is the probability that the buffer is full and there is no space for new packets. From queuing theory it is equal to PL \cite{b4}:
+
+    \begin{equation}
+        PL=P_{B+1}=\frac{{\left(\frac{\lambda}{\mu}\right)^{B+1}}{\left(1-\frac{\lambda}{\mu}\right)} }
+        {{1-\left(\frac{\lambda}{\mu}\right)}^{B+2}}
+    \end{equation}
+
+    An important thing to consider is that our model is of open queuing network type and the assumption of independence of arrival is no longer held. That is, the arrival rate to the second node is dependent on service rate and packet loss of the first node. In the same manner, the third node is dependent on the second node and so on. Therefore the Poisson property of arrivals in no longer valid and the computation will be very complex. For this reason, we define an approximating assumption: the arrival rate of all nodes remain Poisson, but the corresponding $\lambda$ changes. For example, suppose that we want to know the arrival rate of node i; we know that the arrival rate of its preceding node is $\lambda_{i-1}$ and the packets are lost with the probability $PL_{i-1}$. Therefore, with a simple approximation, the arrival rate of the $i^{th}$ node can be calculated:
+
+    \begin{equation}
+        \lambda_i=\lambda_{i-1} \times PL_{i-1}
+    \end{equation}
+    And also:
+    \begin{equation}
+        \lambda_1=\lambda
+    \end{equation}
+
+    \textbf{Step 2:} we calculate the mean value of a typical path's delay. A packet traversing from source to destination, wait a time equal to $W$ in each node, then enters a link and has a propagation delay equal to $t_p$. Therefore, as there are $N$ nodes and $N-1$ links, the path's delay is:
+    \begin{equation}
+        Delay_{path}=\sum_{i=1}^{E\left[n\right]}W_i+\left(N-1\right)t_p
+    \end{equation}
+
+    Where, $W_i$ is the value of $W$ when $\lambda=\lambda_i$, and $W$ is the waiting time of a $m/m/1/k$ queue which in turn is \cite{b4}
+
+    \begin{equation}
+        W=\sum_{n=0}^B\frac{\left(n+1\right)P_n}
+        {\mu\left(1-P_{B+1}\right)}=\frac{L-\left(B+2\right)P_{B+1}+1}{\mu\left(1-P_{B+1}\right)}
+    \end{equation}
+
+    $L$ is the mean number of packets in a node and is equal to \cite{b4}:
+
+    \begin{equation}
+        L=\frac{\lambda\left(1+\left(B+1\right)\left(\frac{\lambda}{\mu}\right)^{B+2}-\left(B+2\right)\left(\frac{\lambda}{\mu}\right)^{B+1}\right)}{\left(\mu-\lambda\right)\left(1-\left(\frac{\lambda}{\mu}\right)^{B+2}\right)}
+    \end{equation}
+
+    Therefore, we have:
+
+    \begin{equation}
+        \begin{split}
+            &E\left[Delay_{path}\right]\\&=\sum_{i=1}^n\left(\frac{L_i-\left(B+2\right)P_{i,B+1}+1}{\mu\left(1-P_{i,B+1}\right)}\right)+\left(E\left[N\right]-1\right)E\left[t_p\right]=\sum_{i=1}^n\left(\frac{L_i-\left(B+2\right)P_{i,B+1}+1}{\mu\left(1-P_{i,B+1}\right)}\right)+\frac{E\left[Len_{link}\right]}{C}
+        \end{split}
+    \end{equation}
+
+    $Len_{link}$ is a random variable and demonstrates the distribution of links' length. $C$ is the light speed or more precisely, the propagation speed of waves in the links.
+
+    Now, for evaluating the survivability of a path, we employ the following reasoning:
+    If the path doesn't fail, as long as the values of packet loss and packets' delay don't exceed a specific threshold, the survivability is equal to one. When these values exceed their thresholds, the value of survivability has inverse relation with the difference of packet loss and delay to their threshold. Now, if this path fails, with some probability, a spare path is chosen, and then the survivability of this new path determines the survivability of the previous one. Therefore the similarity of the statistical properties of the paths helps us and the following equations are obtained:
+
+    \begin{equation}
+        \begin{split}
+            &Survivability\\&=\frac{1-P_{path\_failure}}{1+\max\left(PL_{path}-T_{PL},0\right)+\max\left(Delay_{path}-T_{Delay},0\right)}+P_{path\_failure}\times P_{existence\_of\_backup\_path}\times
+            Survivability
+        \end{split}
+    \end{equation}
+
+    \begin{equation}
+        \begin{split}
+            &\Rightarrow Survivability
+            \\&=\frac{\left( 1-P_{path\_failure} \right)}
+            {\left(
+            \left(1+\max\left(PL_{path}-T_{PL},0\right)+\max\left(Delay_{path}-T_{Delay},0 \right)\right)
+            \times
+            \left(1- P_{path\_failure}\times P_{existence\_of\_backup\_path} \right)
+            \right)}
+        \end{split}
+    \end{equation}
+
+    $P_{path\_failure}$ is the failure probability of the path and its value is equal to the probability that at least, one of the path's links fails. Therefore:
+
+    \begin{equation}
+        P_{path\_failure}=1-\left( 1-LF \right)^{E\left[ N \right]-1}
+    \end{equation}
+
+    $P_{existence\_of\_backup\_path}$, is the probability of existence of a spare path. Considering the fact that initially, there are $R$ non-failed paths and the probability of non-existence of any spare path is equal to the probability that $R-1$ paths fail, we have:
+
+    \begin{equation}
+        P_{existence\_of\_backup\_path} = 1-\left( P_{path\_failure} \right)^{R-1}
+    \end{equation}
+
+    $T_{PL}$ and $T_{Delay}$ are the threshold values for packet loss and packets' delay respectively. That is, if these parameters exceed the thresholds, survivability begins to decrease with inverse relation.
+
+    The value of survivability is between zero and one. Proof:
+
+    \begin{equation}
+        \begin{split}
+            Let:&P_1=P_{path\_failure},\\
+            &P_2=P_{existence\_of\_backup\_path} \\
+            &0 \leq P_1 \leq 1, \\
+            &0 \leq P_2 \leq 1 \\
+            &\Rightarrow P_1 \geq P_1P_2
+        \end{split}
+    \end{equation}
+
+    \begin{equation}
+        \begin{split}
+            &\Rightarrow 1-P_1\leq 1-P_1P_2 \\
+            &\Rightarrow \frac{1-P_1}{1-P_1P_2}\leq1
+        \end{split}
+    \end{equation}
+
+    \begin{equation}
+        \begin{split}
+            & 1+\max\left( PL_{path} -T_{PL},0 \right)+\max\left( Delay_{path}-T_{Delay},0 \right) \geq 1 \\
+            \Rightarrow & \frac{1}{1+\max\left( PL_{path} -T_{PL},0 \right)+\max\left( Delay_{path}-T_{Delay},0 \right)} \leq 1 \\
+            \Rightarrow & \frac{1-P_1}{1-P_1P_2}\times\frac{1}{1+\max\left( PL_{path} -T_{PL},0 \right)+\max\left( Delay_{path}-T_{Delay},0 \right)}\leq 1 \\
+            \Rightarrow & Survivability \leq 1
+        \end{split}
+    \end{equation}
+
+    It is easy to show that the value of survivability is always greater or equal to zero, so:
+    \begin{equation}
+        0 \leq Survivability \leq 1
+    \end{equation}
+
+    In the next section, using simulation, the precision of the above formulas will be examined.
+
+    \section{Simulation Results} \label{sec:simres}
+    In this section, the value of survivability is determined both by means of formulas and simulation, and their agreement is evaluated. For simulation, we used the NS2 software and the OTcl scripts.
+
+    \subsection{Effect of link failure probability on the survivability}
+    By changing the value of link failure probability while other parameters are remained fix, the value of survivability changes according to Fig. \ref{fig:3}. Values of other parameters are as follows:
+    \begin{equation}
+        \begin{split}
+            N=20_{nodes},\\
+            B=20_{packets},\\
+            \lambda=30_{packets/s},\\
+            \mu=33_{packets/s},\\
+            R=10_{paths},\\
+            T_{PL}=2_{packets},\\
+            T_{Delay}=4_s
+        \end{split}
+    \end{equation}
+
+    It can be seen that by increasing the link failure probability the value of survivability decreases such that when the link failure probability is equal to one, the value of survivability is zero.
+
+    \begin{figure}[htbp]
+        \centering
+        \makebox[\textwidth]{\includegraphics{rbpj3.png}}
+        \caption{Survivability in terms of link failure probability}
+        \label{fig:3}
+    \end{figure}
+
+    \subsection{Effect of Buffer Size on the survivability}
+    Changing the buffer size while other parameters are remained fix, causes the value of survivability change according to Fig. \ref{fig:4}. Value of other parameters is chosen as follows:
+
+    \begin{equation}
+        \begin{split}
+            N=20_{nodes},\\
+            LF=0.01,\\
+            \lambda=30_{packets/s},\\
+            \mu=33_{packets/s},\\
+            R=10_{paths},\\
+            T_{PL}=5_{packets},\\
+            T_{Delay}=3_s
+        \end{split}
+    \end{equation}
+
+    As expected, by increasing the buffer size, the value of survivability increases; it is because that increasing the buffer size decreases the packet loss.
+
+    \begin{figure}[htbp]
+        \centering
+        \makebox[\textwidth]{\includegraphics{rbpj4.png}}
+        \caption{Survivability in terms of buffer size}
+        \label{fig:4}
+    \end{figure}
+
+    \subsection{Effect of number of nodes on the survivability}
+    With changing the number of nodes of a path while other parameters are remained fix, the value of survivability changes according to fig. \ref{fig:5}. Value of other parameters is so:
+
+
+    \begin{equation}
+        \begin{split}
+            B=10_{packets},\\
+            LF=0.01,\\
+            \lambda=30_{packets/s},\\
+            \mu=33_{packets/s},\\
+            R=10_{paths},\\
+            T_{PL}=5_{packets},\\
+            T_{Delay}=2_s
+        \end{split}
+    \end{equation}
+
+    It is realized that increasing the number of nodes decreases the survivability. It is because when the number of nodes increases, both the average delay of packets and the packet loss increase.
+
+    \begin{figure}[htbp]
+        \centerline{\includegraphics{rbpj5.png}}
+        \caption{Survivability in terms of number of nodes}
+        \label{fig:5}
+    \end{figure}
+
+    In the above diagrams, in some points, a continuous increase or decrease in the value of survivability is expected but this is not the case. For instance we expect the value of survivability to increase but it decreases. This phenomenon reveals the impact of thresholds on survivability. That is, in some point, the delay of packets increases but instead of decreasing, the survivability increases. It's because in that point, the value of packet loss goes below its threshold and affects considerably on the value of survivability and compensates the effect of the other parameter.
+
+    \section{Conclusion} \label{sec:conc}
+    We have presented in this paper a queuing-theory based model for general-case packet-switched network in which the nodes are $m/m/1/k$ queues. Parameters such as buffer size and packets' delay were considered important in determining the survivability of such network. Simulation results are in accordance with the model. It was shown that increasing the buffer size has a positive impact on the survivability. Increasing the number of nodes and the link failure probability both decrease the survivability.
+
+    The future work is to impose more realistic limitations on network properties such as dependence of node failures on each other, the impact of traffic resulted from path replacement on packet loss, the impact of link failure on packets' delay, assuming different structures for network nodes, dependence of link failures on each other, the possibility of repair and recovery in the network and so on.
+   
+    \begin{thebibliography}{00}
+        \bibitem{b1} C. Charnsripinyo and D. Tipper, "Topological Design of Survivable Wireless Access Networks", Proceedings Fourth IEEE International Workshop on the Design of Reliable Communication Networks, (DRCN 2003), Banff, Canada, October 20-22, 2003, pp. 371-378.
+
+        \bibitem{b2} D. Chen, S. Garg, K. S. Trivedi, "Network Survivability Performance Evaluation: A Quantitative Approach with Applications in Wireless Adhoc Networks", Proceedings of the 5th ACM International Workshop on Modeling Analysis and Simulation of Wireless and Mobile Systems (MSWiM'02), Atlanta, Georgia, September 2002, pp. 61-68.
+
+        \bibitem{b3} M. Keshtgary, F. A. Al-Zahrani, A. P. Jayasumana, A. H. Jahangir, "Network Survivability Performance Evaluation with Applications in WDM Networks with Wavelength Conversion", LCN 2004, pp. 344-351.
+
+        \bibitem{b4} L. Kleinrock, Queueing Systems-Volume I: Theory, John Wiley \& Sons, 1975.
+
+        \bibitem{b5} J. C. Knight, K. J. Sullivan, M. C. Elder, C. Wang, "Survivability Architectures: Issues and Approaches", Proceedings of the 2000 DARPA Information Survivability Conference and Exposition (DISCEX 2000). Hilton Head, South Carolina, January 25-27, 2000. Los Alamitos, CA: IEEE Computer Society, 2000, pp. 157-171.
+
+        \bibitem{b6} Y. Liu, V. B. Mendiratta, and K. S. Trivedi, "Survivability Analysis of Telephone Access Network", In Proceedings of the 15th IEEE International Symposium on Software Engineering (ISSRE'04), Saint-Malo, Bretagne, France, November 2004, pp. 367-378.
+
+        \bibitem{b7} Y. Liu, K. S. Trivedi, "A General Framework for Network Survivability Quantification", In Proceedings of the 12th GI/ITG Conference on Measuring, Modelling and Evaluation of Computer and Communication Systems (MMB) together with 3rd Polish-German Teletraffic Symposium (PGTS), Dresden, Germany, September 2004, pp. 369-378.
+
+        \bibitem{b8} Y. Liu, D. Tipper, and P. Siripongwutikorn, "Approximating Optimal Spare Capacity Allocation by Successive Survivable Routing", ACM/IEEE Transactions on Networking, Vol. 13, No. 1., Feb. 2005, pp. 198-211.
+
+        \bibitem{b9} Y. Liu, D. Tipper, and K. Vajanapoom, "Spare Capacity Allocation in Multi-Layer Networks", Proceedings Fifth IEEE International Workshop on the Design of Reliable Communication Networks, (DRCN 2005), Ischia, Italy, October 16-19, 2005, pp. 261-268.
+
+        \bibitem{b10} S. Park, J. Song, B. Kim, "A Survivability Strategy in Mobile Networks", IEEE Transactions on Vehicular Technology, Volume: 55 , Issue: 1, January 2006, pp. 328-340.
+
+        \bibitem{b11} C. Prommak and D. Tipper, "Load Distribution Survivable Lightpath Routing for Optical Based Virtual Private Networks", Proceedings IEEE Workshop on High Performance Switching and Routing, (HPSR 2002), Kobe, Japan, May 26-29, 2002, pp. 278-282.
+
+        \bibitem{b12} B. H. Shen, B. Hao, and A. Sen, "Minimum Cost Ring Survivability in WDM Networks", Workshop on High Performance Switching and Routing, 2003, HPSR. 24-27 June 2003, pp. 183-188.
+
+        \bibitem{b13} W. Yurcik and D. Tipper, "A Survivability Framework for Connection Oriented Group Communications", Proceedings of IEEE Pacific Rim International Symposium on Dependable Computing 2000, (PRDC 2000) Los Angeles, CA, December 2000, pp. 53-58.
+
+        \bibitem{b14} W. Yurcik, D. Tipper and D. Medhi, "The Use of Hop Limits to Provide Survivable ATM Group Communications", Proceedings of ACM Workshop on Networked Group Communications (NGC 2000), Stanford University, Nov. 2000, pp, 131-140.
+
+        \bibitem{b15} G. Zhao, H. Wang, J. Wang, "A Novel Quantitative Analysis Method for Network Survivability", First International Multi-Symposiums on Computer and Computational Sciences, 2006, IMSCCS '06, April 20-24, 2006, pp. 30-33.
+
+    \end{thebibliography}
+\end{document}
